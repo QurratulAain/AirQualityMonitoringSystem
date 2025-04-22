@@ -1,1 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Air Quality Monitoring System</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <!-- <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+  
+  </script> -->
+  
+
+  
+  
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-green-600 text-white shadow">
+    <div class="container mx-auto px-4 py-6">
+      <h1 class="text-3xl font-bold">Air Quality Monitoring System</h1>
+      <p class="text-sm">Real-time temperature and humidity tracking powered by ESP32 and DHT22</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto px-4 py-10 space-y-16">
+
+    <!-- Overview Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Overview</h2>
+      <p>This system monitors and records temperature and humidity in real time using an ESP32 microcontroller and DHT22 sensor. Data is displayed below and stored securely in Firebase.</p>
+    </section>
+
+    <!-- Real-time Readings -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Live Sensor Data</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+          <h3 class="text-lg font-semibold">Temperature (°C)</h3>
+          <p id="temp-c" class="text-3xl font-bold text-red-500">--</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+          <h3 class="text-lg font-semibold">Temperature (°F)</h3>
+          <p id="temp-f" class="text-3xl font-bold text-yellow-500">--</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+          <h3 class="text-lg font-semibold">Humidity (%)</h3>
+          <p id="humidity" class="text-3xl font-bold text-blue-500">--</p>
+        </div>
+        <div class="bg-white shadow rounded-lg p-6 text-center">
+          <h3 class="text-lg font-semibold">Air Quality Status</h3>
+          <p id="air-quality-status" class="text-2xl font-bold text-green-600">--</p>
+          <p class="text-sm text-gray-600">Voltage: <span id="mq135-voltage">--</span> V</p>
+          <p class="text-sm text-gray-600">Raw ADC: <span id="mq135-adc">--</span></p>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- Graphs Section -->
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="graphs.html">
+        <button style="padding: 10px 20px; font-size: 16px;">See Graphs</button>
+      </a>
+    </div>
+    
+    <!-- About the System -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">How It Works</h2>
+      <p>The ESP32 collects data from the DHT22 sensor and uploads it to Firebase every 30 seconds. The website fetches this data and displays it in real-time along with graphical representations. This allows users to track air quality trends easily and reliably.</p>
+    </section>
+
+    <!-- Team / Credits -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Project Team</h2>
+      <ul class="list-disc list-inside">
+        <li>Website, graphs, system overview</li>
+        <li>Firebase backend, sensor data logic</li>
+        <li>OTA integration & hardware</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="bg-green-600 text-white py-4 mt-16">
+    <div class="text-center text-sm">© 2025 Air Quality Monitoring System — Built by Team AQMS</div>
+  </footer>
+  <script src="script.js"></script>
+
+
+  <!-- <script type="text/javascript">
+    (function(){
+        emailjs.init({
+          publicKey: "zGsGaBQMI-j1lygia",
+        });
+    })();
+  </script>   -->
+
+</body>
+</html>
 
