@@ -9,6 +9,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+  
+  </script>
+
 </head>
 
 <body class="bg-gray-900 text-gray-100 font-poppins">
@@ -99,7 +104,7 @@
 
   <div class="info-card text-center">
     <p class="text-lg text-green-400 font-semibold mb-4">Student 1: SUMAIKA IMRAN (CS-22009)</p>
-    <p class="text-lg text-green-400 font-semibold mb-4">Student 2: QURATULAIN (CS-22018)</p>
+    <p class="text-lg text-green-400 font-semibold mb-4">Student 2: QURRATULAIN (CS-22018)</p>
     
     <p class="text-gray-400 text-md mt-6">
       Guided by: <span class="font-semibold text-green-400">Dr. Khurram</span><br>
@@ -108,6 +113,28 @@
   </div>
 </section>
 
+  <!-- User Email Collection Form -->
+<section class="section">
+  <h2 class="section-title">🔔 Get Air Quality Alerts!</h2>
+  <div class="info-card">
+    <form id="emailForm" class="flex flex-col space-y-4 items-center">
+      <input 
+        type="email" 
+        id="userEmail" 
+        placeholder="Enter your email" 
+        required 
+        class="p-2 rounded text-black"
+      />
+      <button 
+        type="submit" 
+        class="btn-primary"
+      >
+        Subscribe for Alerts
+      </button>
+    </form>
+    <p id="emailStatus" class="text-green-400 mt-4"></p>
+  </div>
+</section>
 
   <!-- Live Sensor Readings -->
   <section class="section">
@@ -164,5 +191,13 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="text/javascript">
+    (function(){
+        emailjs.init({
+          publicKey: "zGsGaBQMI-j1lygia",
+        });
+    })();
+  </script>
+
 </body>
 </html>

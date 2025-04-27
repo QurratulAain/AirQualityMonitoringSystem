@@ -2,6 +2,7 @@ let tempChartInstance = null;
 let humidityChartInstance = null;
 let airQualityChartInstance = null;
 let adcChartInstance = null;
+let alertSent = false;
 
 
 // Smooth Scroll to Graphs Section
@@ -38,6 +39,59 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+let subscribedEmail = ""; // User email
+
+  // When user submits email
+  document.getElementById('emailForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    //const emailInput = document.getElementById('userEmail').value.trim();
+    const emailInput = document.getElementById('userEmail');  // select input box
+    const email = emailInput.value.trim();
+    if (emailInput) {
+        subscribedEmail = email;
+        document.getElementById('emailStatus').textContent = "✅ You have subscribed successfully!";
+        emailInput.value = ""; //Clear the input box
+        console.log(subscribedEmail);
+        console.log("User subscribed email:", subscribedEmail);
+
+        // Force a fresh check
+        checkLatestTemperatureForAlert();
+    }
+});
+
+
+
+//Alert function
+function sendAlertEmail(temp) {
+  if (!subscribedEmail) {
+    console.warn("No subscribed email, skipping alert email.");
+    return;
+  }
+  emailjs.send("service_fjsfmdq", "template_79qlyzd", {
+    to_email: subscribedEmail,
+    AQMS: "Air Quality Monitoring System",
+    message: `${temp}°C`
+  }).then(
+    () => console.log("✅ Email sent successfully to:", subscribedEmail),
+    (error) => console.error("❌ Failed to send email:", error)
+  );
+}
+
+function checkLatestTemperatureForAlert() {
+  dataRef.limitToLast(1).once("value", (snapshot) => {
+      const latest = snapshot.val();
+      if (latest) {
+          const entry = Object.values(latest)[0];
+          console.log(entry);
+          console.log(entry["temperature(°C)"]);
+          if (entry["temperature(°C)"] >= 30 && !alertSent) {
+              sendAlertEmail(entry["temperature(°C)"]);
+              alertSent = true;
+          }
+      }
+  });
+}
+
 // Fetch Live Air Quality Sensor Readings
 const mq135Ref = db.ref("MQ135_sensor_data");
 
@@ -72,6 +126,10 @@ dataRef.on("value", (snapshot) => {
             labels.push(new Date(entry.timestamp).toLocaleTimeString());
             tempData.push(entry["temperature(°C)"]);
             humidityData.push(entry.humidity);
+            if (entry["temperature(°C)"] >= 30 && !alertSent) {
+              sendAlertEmail(entry["temperature(°C)"]);
+              //alertSent = true;
+            }
         });
 
         const latest = history[Object.keys(history).pop()];
@@ -442,5 +500,7 @@ function checkFireAlert(adcValue) {
       playNormalBeep();
     }, 700); // Play second beep after 0.7 seconds
   }
+  
+  
   
   
