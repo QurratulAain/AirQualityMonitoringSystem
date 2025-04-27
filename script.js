@@ -125,15 +125,48 @@ function updateTempChart(labels, data) {
                 borderColor: '#f87171',
                 backgroundColor: 'rgba(248,113,113,0.1)',
                 fill: true,
-                tension: 0.4
+                tension: 0.4,
+                borderWidth: 3,
+            pointBackgroundColor: '#f87171',
+            pointBorderColor: '#f87171',
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+                legend: {
+                  labels: { color: '#ffffff', font: { size: 16 } },
+                   position: 'top' 
+            },
+            title: {
+              display: true,
+              text: 'Temperature Over Time',
+              color: '#f87171',
+              font: { size: 22 }
             }
+        },
+        scales: {
+          x: {
+            ticks: { color: '#d1d5db' },
+            title: {
+              display: true,
+              text: 'Time',
+              color: '#9ca3af',
+              font: { size: 18 }
+            }
+          },
+          y: {
+            ticks: { color: '#d1d5db' },
+            title: {
+              display: true,
+              text: 'Temperature',
+              color: '#9ca3af',
+              font: { size: 18 }
+            },
+            beginAtZero: true
+          }
         }
+      }
     });
 }
 
@@ -150,18 +183,49 @@ function updateHumidityChart(labels, data) {
                 borderColor: '#60a5fa',
                 backgroundColor: 'rgba(96,165,250,0.1)',
                 fill: true,
-                tension: 0.4
+                tension: 0.4,
+                borderWidth: 3,
+                pointBackgroundColor: '#60a5fa',
+                pointBorderColor: '#60a5fa',
             }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'top' }
+              
+                legend: {
+                  labels: { color: '#ffffff', font: { size: 16 } },
+                   position: 'top' 
             },
-
-            
-            
+            title: {
+              display: true,
+              text: 'Humidity  Over Time',
+              color: '#60a5fa',
+              font: { size: 22 }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#d1d5db' },
+              title: {
+                display: true,
+                text: 'Time',
+                color: '#9ca3af',
+                font: { size: 18 }
+              }
+            },
+            y: {
+              ticks: { color: '#d1d5db' },
+              title: {
+                display: true,
+                text: 'Humidity',
+                color: '#9ca3af',
+                font: { size: 18 }
+              },
+              beginAtZero: true
+            }
         }
+      }
     });
 }
 
@@ -189,34 +253,47 @@ mq135Ref.on("value", (snapshot) => {
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16,185,129,0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#10b981',
+                    pointBorderColor: '#10b981',
+         
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: { position: 'top' }
+                    legend: { 
+                      labels: { color: '#ffffff', font: { size: 16 } },
+                      position: 'top' 
                 },
                 title: {
                     display: true,
                     text: 'Voltage Value Over Time',
-                    color: 'rgba(16,185,129,0.1)',
+                    color: '#10b981',
                     font: { size: 22 }
-                  },
+                  }
+                },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: "Voltage (V)"
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: "Time"
-                        }
+                  x: {
+                    ticks: { color: '#d1d5db' },
+                    title: {
+                      display: true,
+                      text: 'Time',
+                      color: '#9ca3af',
+                      font: { size: 18 }
                     }
+                  },
+                  y: {
+                    ticks: { color: '#d1d5db' },
+                    title: {
+                      display: true,
+                      text: 'Voltage',
+                      color: '#9ca3af',
+                      font: { size: 18 }
+                    },
+                    beginAtZero: true
+                  }
                 }
             }
         });
@@ -322,7 +399,7 @@ function checkFireAlert(adcValue) {
       }, 10000);
     }
   }
-  
+
   function playSoftBeep() {
     const context = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = context.createOscillator();
