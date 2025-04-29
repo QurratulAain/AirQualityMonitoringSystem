@@ -18,50 +18,71 @@
 
 <body class="bg-gray-900 text-gray-100 font-poppins">
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      
-      <!-- Left Side: Logo + Dashboard Name -->
-      <div class="flex items-center space-x-3">
-        <img src="logo.png" alt="AQMS Logo" class="h-10 w-10 rounded-full border-2 border-green-400">
-        <div class="text-2xl font-bold text-green-400">AQMS Dashboard</div>
-      </div>
-  
-      <!-- Right Side: Live Indicator -->
-      <div class="space-x-6  md:flex items-center">
-        <span class="live-indicator">● Live</span>
-      </div>
-  
+ <!-- Navbar -->
+ <nav class="navbar bg-gray-900 shadow-md fixed w-full z-50">
+  <div class="container mx-auto flex justify-between items-center p-4">
+    
+    <!-- Left Side: Logo + Dashboard Name -->
+    <div class="flex items-center space-x-3">
+      <img src="logo.png" alt="AQMS Logo" class="h-10 w-10 rounded-full border-2 border-green-400">
+      <div class="text-2xl font-bold text-green-400">AQMS Dashboard</div>
     </div>
-  </nav>
-  
+
+    <!-- Right Side: Navigation Links + Subscribe Button -->
+    <div class="flex items-center space-x-4">
+      <a href="#overview" class="text-lg text-gray-300 hover:text-green-400">Overview</a>
+      <a href="#howitworks" class="text-lg text-gray-300 hover:text-green-400">How It Works</a>
+      <a href="#live-data" class="text-lg text-gray-300 hover:text-green-400">Live Data</a>
+      
+      <a href="#subscribe" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded text-sm font-semibold transition duration-300">
+        Subscribe
+      </a>
+
+      <span class="text-red-500 font-bold animate-pulse">● Live</span>
+    </div>
+  </div>
+</nav>
+
   
 
   <!-- Home -->
   <header id="home" class="header">
-    <h1 class="text-4xl font-bold mb-4">Air Quality Monitoring System</h1>
-    <p class="mb-6 text-lg">Real-time monitoring of Temperature, Humidity, and Air Quality</p>
-    <button onclick="scrollToGraphs()" class="btn-primary">View Graphs</button>
+    <!-- Overlay for better text visibility -->
+    <div class="overlay"></div>
+    
+    <!-- Background Video -->
+    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover">
+      <source src="aqms.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  
+    <!-- Header Content -->
+    <div class="content text-center p-8">
+      <h1 class="text-4xl font-bold mb-4">Air Quality Monitoring System</h1>
+      <p class="mb-6 text-lg">Real-time monitoring of Temperature, Humidity, and Air Quality</p>
+      <button onclick="scrollToGraphs()" class="btn-primary">View Graphs</button>
+      
+    </div>
   </header>
+  
 
   <!-- Overview Section -->
 <section id="overview" class="section">
   <h2 class="section-title">📊 Overview</h2>
 
   <div class="info-card">
-    <p class="text-lg text-gray-300 leading-relaxed">
-      Our <span class="text-green-400 font-semibold">Air Quality Monitoring System (AQMS)</span> is designed to track environmental conditions in real-time.
+    <p class="text-lg text-gray-300 leading-relaxed text-justify">
+      Our <span class="text-green-400 font-semibold">Air Quality Monitoring System (AQMS)</span> provides real-time tracking of environmental conditions.
       <br><br>
-      Equipped with the powerful <span class="text-green-400 font-semibold">MQ-135 gas sensor</span> and the reliable 
-      <span class="text-green-400 font-semibold">DHT22 temperature and humidity sensor</span>, 
-      the system collects vital air quality and weather data every few seconds.
+      Equipped with the advanced <span class="text-green-400 font-semibold">MQ-135 gas sensor</span> for detecting harmful gases and the dependable 
+      <span class="text-green-400 font-semibold">DHT22 temperature and humidity sensor</span>, the system collects crucial air quality and weather data every few seconds.
       <br><br>
-      Data is securely transmitted to the <span class="text-green-400 font-semibold">Firebase Realtime Database</span> using an internet-connected 
-      <span class="text-green-400 font-semibold">ESP32 microcontroller</span>.
-      This dashboard provides a live, beautiful visualization of that data for easy monitoring.
+      This data is securely transmitted to the <span class="text-green-400 font-semibold">Firebase Realtime Database</span> using an internet-connected 
+      <span class="text-green-400 font-semibold">ESP32 microcontroller</span>, ensuring accurate and timely updates.
       <br><br>
-      The system aims to create safer, healthier environments by continuously detecting harmful gases, weather changes, and alerting users in real-time.
+      The dashboard displays this data in a beautiful and intuitive visualization, providing users with easy-to-read insights on air quality, temperature, and humidity levels.
+      <br><br>
+      By continuously monitoring environmental factors, the system aims to improve public health and safety by providing real-time alerts on harmful gases and weather changes.
     </p>
   </div>
 </section>
@@ -71,7 +92,7 @@
   <h2 class="section-title">⚙️ How It Works</h2>
 
   <div class="info-card">
-    <ul class="list-disc list-inside text-lg text-gray-300 leading-relaxed space-y-4 mt-4">
+    <ul class="list-disc list-inside text-lg text-gray-300 leading-relaxed space-y-4 mt-4 text-justify">
       <li>
         🌡️ <span class="text-green-400 font-semibold">Sensing:</span> 
         The ESP32 board collects readings from the <span class="text-green-400 font-semibold">DHT22 sensor</span> and 
@@ -98,81 +119,111 @@
 </section>
 
 
-  <!-- Project Team Section -->
-<section id="team" class="section">
-  <h2 class="section-title">👩‍💻 Project Team</h2>
 
-  <div class="info-card text-center">
-    <p class="text-lg text-green-400 font-semibold mb-4">Student 1: SUMAIKA IMRAN (CS-22009)</p>
-    <p class="text-lg text-green-400 font-semibold mb-4">Student 2: QURRATULAIN (CS-22018)</p>
-    
-    <p class="text-gray-400 text-md mt-6">
-      Guided by: <span class="font-semibold text-green-400">Dr. Khurram</span><br>
-      Department of Computer And Information Systems Engineering ,NED University Of Engineering and Technology
-    </p>
-  </div>
-</section>
 
-  <!-- User Email Collection Form -->
-<section class="section">
-  <h2 class="section-title">🔔 Get Air Quality Alerts!</h2>
-  <div class="info-card">
-    <form id="emailForm" class="flex flex-col space-y-4 items-center">
-      <input 
-        type="email" 
-        id="userEmail" 
-        placeholder="Enter your email" 
-        required 
-        class="p-2 rounded text-black"
-      />
-      <button 
-        type="submit" 
-        class="btn-primary"
-      >
-        Subscribe for Alerts
-      </button>
-    </form>
-    <p id="emailStatus" class="text-green-400 mt-4"></p>
-  </div>
-</section>
 
   <!-- Live Sensor Readings -->
-  <section class="section">
-    <h2 class="section-title">Live Sensor Data</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="card">
-        <h3>Temperature (°C)</h3>
-        <p id="temp-c" class="data-value">--</p>
+<section id="live-data",class="section bg-gradient-to-r p-8 rounded-lg shadow-lg">
+  <h2 class="section-title text-3xl font-semibold text-center text-white mb-8">🌱 Live Sensor Data</h2>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">Temperature (°C)</h3>
+      <p id="temp-c" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">Temperature (°F)</h3>
+      <p id="temp-f" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">Humidity (%)</h3>
+      <p id="humidity" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">Air Quality Status</h3>
+      <p id="air-quality-status" class="badge text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">MQ-135 Voltage (V)</h3>
+      <p id="mq135-voltage" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">MQ-135 RAW ADC</h3>
+      <p id="mq135-adc" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">MQ-135 Resistance Rs(ohms)</h3>
+      <p id="mq135-resistance" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+
+    <div class="card bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+      <h3 class="text-xl font-semibold text-gray-700">Estimated CO2 (PPM)</h3>
+      <p id="mq135-CO2" class="data-value text-3xl font-bold text-gray-800">--</p>
+    </div>
+  </div>
+  
+  <p id="last-updated" class="text-center text-gray-400 mt-4 text-sm">Last Updated: --</p>
+</section>
+
+
+  <!-- Sensor Data Explanation Section -->
+<section id="sensorexplanation" class="section  text-white p-8 rounded-lg shadow-lg">
+  <h2 class="section-title text-3xl font-semibold text-center mb-6">🌱 What These Sensor Readings Mean</h2>
+
+  <div class="info-card bg-gray-800 p-6 rounded-lg shadow-md">
+    <p class="text-lg text-gray-200 leading-relaxed mb-6">
+      Below are the key sensor readings collected by our <strong class="text-yellow-400">Air Quality Monitoring System (AQMS)</strong>. These values provide real-time insights into the environment around you, helping you stay informed about air quality and weather conditions.
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">🌡️ Temperature (°C)</h3>
+        <p class="text-gray-300">The current temperature in degrees Celsius. This helps you understand the warmth or coolness of your environment.</p>
       </div>
-      <div class="card">
-        <h3>Temperature (°F)</h3>
-        <p id="temp-f" class="data-value">--</p>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">🌡️ Temperature (°F)</h3>
+        <p class="text-gray-300">The current temperature in degrees Fahrenheit, a common measurement unit for temperature in many countries.</p>
       </div>
-      <div class="card">
-        <h3>Humidity (%)</h3>
-        <p id="humidity" class="data-value">--</p>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">💧 Humidity (%)</h3>
+        <p class="text-gray-300">The moisture content in the air. Higher humidity can make the air feel warmer, while low humidity causes dryness.</p>
       </div>
-      <div class="card">
-        <h3>Air Quality Status</h3>
-        <p id="air-quality-status" class="badge">--</p>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">🌿 Air Quality Status</h3>
+        <p class="text-gray-300">This status tells you how clean or polluted the air is. A good status means safe air, while poor or hazardous status indicates unhealthy air quality.</p>
       </div>
-      <div class="card">
-        <h3>MQ-135 Voltage (V)</h3>
-        <p id="mq135-voltage" class="data-value">--</p>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">⚡ MQ-135 Voltage (V)</h3>
+        <p class="text-gray-300">The voltage output from the MQ-135 sensor. Higher voltage indicates poorer air quality.</p>
       </div>
-      <div class="card">
-        <h3>MQ-135 RAW ADC</h3>
-        <p id="mq135-adc" class="data-value">--</p>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">📊 MQ-135 RAW ADC</h3>
+        <p class="text-gray-300">This is the raw data from the sensor's ADC (Analog to Digital Converter), helping estimate the air quality level.</p>
+      </div>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">💨 MQ-135 Resistance Rs (Ohms)</h3>
+        <p class="text-gray-300">The resistance measured by the sensor, which helps determine the gas concentration in the air.</p>
+      </div>
+      <div class="info-item bg-gray-700 p-4 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold text-yellow-400">🌫️ Estimated CO2 (PPM)</h3>
+        <p class="text-gray-300">The estimated concentration of carbon dioxide (CO2) in the air, in parts per million (PPM). High CO2 levels can indicate poor air quality.</p>
       </div>
     </div>
-    <p id="last-updated" class="text-center text-gray-400 mt-4 text-sm"></p>
-  </section>
+  </div>
+</section>
+
 
   <!-- Graphs -->
   <section id="graphs" class="section">
     <h2 class="section-title">Sensor Graphs</h2>
 
     <canvas id="tempChart" class="chart"></canvas>
+    <canvas id="tempChart(F)" class="chart hidden"></canvas>
     <canvas id="humidityChart" class="chart hidden"></canvas>
     <canvas id="airQualityChart" class="chart hidden"></canvas>
     <canvas id="adcChart" class="chart hidden"></canvas>
@@ -183,8 +234,30 @@
 <div id="popup-alert" class="popup hidden">
     ⚠️ Fire or Harmful Gas Detected!
   </div>
-  
+<h2 id="recommendation-heading" style="margin-top: 10px; color: #1f2937;"></h2>
 
+  <<!-- User Email Collection Form -->
+  <section id="subscribe" class="section">
+    <h2 class="section-title">🔔 Get Air Quality Alerts!</h2>
+    <div class="info-card">
+      <form id="emailForm" class="flex flex-col space-y-4 items-center">
+        <input 
+          type="email" 
+          id="userEmail" 
+          placeholder="Enter your email" 
+          required 
+          class="p-2 rounded text-black"
+        />
+        <button 
+          type="submit" 
+          class="btn-primary"
+        >
+          Subscribe for Alerts
+        </button>
+      </form>
+      <p id="emailStatus" class="text-green-400 mt-4"></p>
+    </div>
+  </section>
   <!-- Footer -->
   <footer class="bg-gray-800 text-center py-4 mt-12">
     <p class="text-gray-400">© 2025 Air Quality Monitoring System — Built with ❤️ by Team AQMS</p>

@@ -103,9 +103,11 @@ mq135Ref.limitToLast(1).on("value", (snapshot) => {
             document.getElementById("air-quality-status").textContent = latest.MQ135_air_quality_status || "--";
             document.getElementById("mq135-voltage").textContent = parseFloat(latest.MQ135_voltage || 0).toFixed(2);
             document.getElementById("mq135-adc").textContent = latest.MQ135_raw_ADC || "--";
+            document.getElementById("mq135-resistance").textContent = latest.resistance_Rs|| "--";
+            document.getElementById("mq135-CO2").textContent = latest.MQ135_raw_ADC || "--";
 
             updateAQIBadge(latest.MQ135_air_quality_status);
-            checkFireAlert(latest.MQ135_raw_ADC); // ✅ Fire alert checking
+            checkAirQualityAlert(latest.estimated_CO2_ppm); // ✅ Fire alert checking
         }
         updateLastUpdated();
     }
@@ -118,6 +120,7 @@ dataRef.on("value", (snapshot) => {
     const history = snapshot.val();
     const labels = [];
     const tempData = [];
+    const tempData_F=[]
     const humidityData = [];
 
     if (history) {
@@ -125,6 +128,7 @@ dataRef.on("value", (snapshot) => {
             const entry = history[key];
             labels.push(new Date(entry.timestamp).toLocaleTimeString());
             tempData.push(entry["temperature(°C)"]);
+            tempData_F.push(entry["temperature(°F)"]);
             humidityData.push(entry.humidity);
             if (entry["temperature(°C)"] >= 30 && !alertSent) {
               sendAlertEmail(entry["temperature(°C)"]);
@@ -135,7 +139,7 @@ dataRef.on("value", (snapshot) => {
         const latest = history[Object.keys(history).pop()];
         if (latest) {
             const tempC = latest["temperature(°C)"];
-            const tempF = (tempC * 9) / 5 + 32;
+            const tempF = latest["temperature(°F)"]
 
             document.getElementById("temp-c").textContent = tempC.toFixed(1);
             document.getElementById("temp-f").textContent = tempF.toFixed(1);
@@ -143,26 +147,54 @@ dataRef.on("value", (snapshot) => {
         }
 
         updateTempChart(labels, tempData);
+        updateTempChart_F(labels, tempData_F);
         updateHumidityChart(labels, humidityData);
         updateLastUpdated();
     }
 });
 
-// Update AQI Status Badge Color
+// Update AQI Status Badge Color & Icon
 function updateAQIBadge(status) {
-    const badge = document.getElementById('air-quality-status');
-    if (!badge) return;
+  const badge = document.getElementById('air-quality-status');
+  if (!badge) return;
 
-    if (status === "GOOD") {
-        badge.style.backgroundColor = "#10b981"; // green
-    } else if (status === "MODERATE") {
-        badge.style.backgroundColor = "#f59e0b"; // yellow
-    } else if (status === "POOR") {
-        badge.style.backgroundColor = "#ef4444"; // red
-    } else {
-        badge.style.backgroundColor = "#4b5563"; // neutral
-    }
+  badge.innerText = status; // Base text
+
+  switch (status) {
+      case "Excellent":
+          badge.style.backgroundColor = "#16a34a"; // deep green
+          badge.style.color = "#ffffff";
+          badge.innerText += " 🌿";
+          break;
+      case "Good":
+          badge.style.backgroundColor = "#10b981"; // green
+          badge.style.color = "#ffffff";
+          badge.innerText += " ✅";
+          break;
+      case "Moderate":
+          badge.style.backgroundColor = "#f59e0b"; // yellow
+          badge.style.color = "#000000";
+          badge.innerText += " ⚠️";
+          break;
+      case "Poor":
+          badge.style.backgroundColor = "#ef4444"; // red
+          badge.style.color = "#ffffff";
+          badge.innerText += " ❌";
+          break;
+      case "Hazardous":
+          badge.style.backgroundColor = "#7e22ce"; // dark purple
+          badge.style.color = "#ffffff";
+          badge.innerText += " ☠️";
+          break;
+      default:
+          badge.style.backgroundColor = "#4b5563"; // gray
+          badge.style.color = "#ffffff";
+          badge.innerText += " ❓";
+  }
+
+  badge.title = `Current air quality is: ${status}`;
 }
+
 
 // Update Last Updated Time
 function updateLastUpdated() {
@@ -198,7 +230,7 @@ function updateTempChart(labels, data) {
             },
             title: {
               display: true,
-              text: 'Temperature Over Time',
+              text: 'Temperature(°C) Over Time',
               color: '#f87171',
               font: { size: 22 }
             }
@@ -217,7 +249,7 @@ function updateTempChart(labels, data) {
             ticks: { color: '#d1d5db' },
             title: {
               display: true,
-              text: 'Temperature',
+              text: 'Temperature(°C)',
               color: '#9ca3af',
               font: { size: 18 }
             },
@@ -226,6 +258,63 @@ function updateTempChart(labels, data) {
         }
       }
     });
+}
+
+function updateTempChart_F(labels, data) {
+  const ctx = document.getElementById('tempChart(F)').getContext('2d');
+  new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels,
+          datasets: [{
+              label: 'Temperature (°F)',
+              data,
+              borderColor: '#bb1cd4',
+              backgroundColor: 'rgba(248,113,113,0.1)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3,
+          pointBackgroundColor: '#bb1cd4',
+          pointBorderColor: '#bb1cd4',
+          }]
+      },
+      options: {
+          responsive: true,
+          plugins: {
+              legend: {
+                labels: { color: '#ffffff', font: { size: 16 } },
+                 position: 'top' 
+          },
+          title: {
+            display: true,
+            text: 'Temperature(°F) Over Time',
+            color: '#bb1cd4',
+            font: { size: 22 }
+          }
+      },
+      scales: {
+        x: {
+          ticks: { color: '#d1d5db' },
+          title: {
+            display: true,
+            text: 'Time',
+            color: '#9ca3af',
+            font: { size: 18 }
+          }
+        },
+        y: {
+          ticks: { color: '#d1d5db' },
+          title: {
+            display: true,
+            text: 'Temperature(°F)',
+            color: '#9ca3af',
+            font: { size: 18 }
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  });
 }
 
 // Create or Update Humidity Chart
@@ -287,7 +376,7 @@ function updateHumidityChart(labels, data) {
     });
 }
 
-// Create or Update Air Quality Voltage Chart
+// Create or Update Air Quality co2 Chart
 mq135Ref.on("value", (snapshot) => {
     const gasData = snapshot.val();
     const labels = [];
@@ -297,7 +386,7 @@ mq135Ref.on("value", (snapshot) => {
         Object.keys(gasData).forEach((key) => {
             const entry = gasData[key];
             labels.push(new Date(entry.timestamp).toLocaleTimeString());
-            voltages.push(parseFloat(entry.MQ135_voltage || 0));
+            voltages.push(parseFloat(entry.estimated_CO2_ppm|| 0));
         });
 
         const ctxAir = document.getElementById('airQualityChart').getContext('2d');
@@ -306,7 +395,7 @@ mq135Ref.on("value", (snapshot) => {
             data: {
                 labels,
                 datasets: [{
-                    label: 'MQ135 Voltage (V)',
+                    label: 'Estimated CO2 (ppm)',
                     data: voltages,
                     borderColor: '#10b981',
                     backgroundColor: 'rgba(16,185,129,0.1)',
@@ -327,7 +416,7 @@ mq135Ref.on("value", (snapshot) => {
                 },
                 title: {
                     display: true,
-                    text: 'Voltage Value Over Time',
+                    text: 'Estimated CO2 Over Time',
                     color: '#10b981',
                     font: { size: 22 }
                   }
@@ -346,7 +435,7 @@ mq135Ref.on("value", (snapshot) => {
                     ticks: { color: '#d1d5db' },
                     title: {
                       display: true,
-                      text: 'Voltage',
+                      text: 'Estimated CO2',
                       color: '#9ca3af',
                       font: { size: 18 }
                     },
@@ -431,32 +520,44 @@ mq135Ref.on("value", (snapshot) => {
   
 
 // ✅ New Fire Alert Function
-function checkFireAlert(adcValue) {
-    const popup = document.getElementById('popup-alert');
-    if (!popup) return;
-  
-    if (adcValue > 700) {
-      popup.textContent = "🔥 EXTREME Danger! Gas Concentration Very High!";
-      popup.classList.remove('hidden');
-      playDoubleBeep(); // Double beep for extreme danger
-    } else if (adcValue > 500) {
-      popup.textContent = "⚠️ Dangerous Gases Detected!";
-      popup.classList.remove('hidden');
-      playNormalBeep(); // Normal beep
-    } else if (adcValue > 300) {
-      popup.textContent = "⚠️ Warning: Air Quality Moderate!";
-      popup.classList.remove('hidden');
-      playSoftBeep(); // Soft beep for warning
-    } else {
-      popup.classList.add('hidden'); // Hide popup if air is good
-    }
-  
-    if (adcValue > 300) {
-      setTimeout(() => {
-        popup.classList.add('hidden'); // Auto-hide after 10 seconds
-      }, 10000);
-    }
+function checkAirQualityAlert(ppm) {
+  const popup = document.getElementById('popup-alert');
+  const heading = document.getElementById('recommendation-heading');
+  if (!popup || !heading) return;
+
+  if (ppm > 5000) {
+    popup.textContent = "🔥 EXTREME DANGER! CO₂ Levels Toxic!";
+    heading.textContent = "🚨 ACTION: Evacuate area immediately and call for help!";
+    popup.classList.remove('hidden');
+    playDoubleBeep();
+  } else if (ppm > 2000) {
+    popup.textContent = "⚠️ Very Poor Air Quality!";
+    heading.textContent = "⚠️ ACTION: Open all windows and leave the area.";
+    popup.classList.remove('hidden');
+    playNormalBeep();
+  } else if (ppm > 1000) {
+    popup.textContent = "⚠️ Moderate Air Quality!";
+    heading.textContent = "🔄 ACTION: Improve ventilation.";
+    popup.classList.remove('hidden');
+    playSoftBeep();
+  } else if (ppm > 400) {
+    popup.textContent = "✅ Good Air Quality.";
+    heading.textContent = "🙂 No action needed.";
+    popup.classList.remove('hidden');
+    // Optional: No beep
+  } else {
+    popup.classList.add('hidden');
+    heading.textContent = "";
   }
+
+  if (ppm > 400) {
+    setTimeout(() => {
+      popup.classList.add('hidden');
+      heading.textContent = "";
+    }, 10000);
+  }
+}
+
 
   function playSoftBeep() {
     const context = new (window.AudioContext || window.webkitAudioContext)();
