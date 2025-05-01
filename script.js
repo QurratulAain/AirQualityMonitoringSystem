@@ -39,24 +39,26 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let subscribedEmail = ""; // User email
+const subscribersRef = db.ref("subscribers");
 
-  // When user submits email
-  document.getElementById('emailForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    //const emailInput = document.getElementById('userEmail').value.trim();
-    const emailInput = document.getElementById('userEmail');  // select input box
-    const email = emailInput.value.trim();
-    if (emailInput) {
-        subscribedEmail = email;
-        document.getElementById('emailStatus').textContent = "✅ You have subscribed successfully!";
-        emailInput.value = ""; //Clear the input box
-        console.log(subscribedEmail);
-        console.log("User subscribed email:", subscribedEmail);
+document.getElementById('emailForm').addEventListener('submit', function (event) {
+  event.preventDefault();
+  const emailInput = document.getElementById('userEmail');
+  const email = emailInput.value.trim().toLowerCase();
 
-        // Force a fresh check
-        checkLatestTemperatureForAlert();
+  if (!email) return;
+
+  // Check for duplicates
+  subscribersRef.orderByChild("email").equalTo(email).once("value", (snapshot) => {
+    if (snapshot.exists()) {
+      document.getElementById("emailStatus").textContent = "⚠️ You have already subscribed!";
+    } else {
+      subscribersRef.push({ email });
+      document.getElementById("emailStatus").textContent = "✅ You have subscribed successfully!";
     }
+
+    emailInput.value = "";
+  });
 });
 
 
