@@ -525,7 +525,7 @@ function checkAirQualityAlert(ppm) {
   const heading = document.getElementById('recommendation-heading');
   if (!popup || !heading) return;
 
-  if (ppm > 5000) {
+  if (ppm < 5000) {
     popup.textContent = "🔥 EXTREME DANGER! CO₂ Levels Toxic!";
     heading.textContent = "🚨 ACTION: Evacuate area immediately and call for help!";
     popup.classList.remove('hidden');
